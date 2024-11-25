@@ -101,7 +101,7 @@ def load_matched_images(tgt_folder, gt_folder, pred_folder, start, num_images, p
     for index, tgt_file in zip(range(len(tgt_files)), tgt_files):
         base_name = tgt_file.split('.')[0]
         gt_file = f"aov_{base_name}.png"  # 必要时需要修改,针对Unity Endoslam
-        pred_file = f"{base_name}{prefix}.png"  # 必要时需要修改
+        pred_file = f"{prefix}{base_name}.png"  # 必要时需要修改
         tgt_image_path = os.path.join(tgt_folder, tgt_file)
         gt_image_path = os.path.join(gt_folder, gt_file)
         pred_image_path = os.path.join(pred_folder, pred_file)
@@ -122,22 +122,16 @@ def run_script(tgt_img_folder, output_dir, num_images_to_load):
     import os
     os.makedirs(output_dir, exist_ok=True)
     import subprocess
-    """python run_infer.py 
-    --input_dir /mnt/share/toky/Projects/GeoWizard/test_Images/ 
-    --output_dir /mnt/share/toky/Projects/GeoWizard/output 
-    --ensemble_size 3 
-    --denoise_steps 10 
-    --seed 0 
-    --domain "indoor"
+    """python .py 
     """
     # 配置参数
-    domain = "indoor"
-    inference_script = "run_infer.py"  # py 的路径
-    ensemble_size = 3
-    denoise_steps = 10
-    seed = 0
-    input_rgb_dir = tgt_img_folder
-    output_dir = output_dir
+    # domain = "indoor"
+    inference_script = "main.py"  # py 的路径
+    # ensemble_size = 3
+    # denoise_steps = 10
+    # seed = 0
+    # input_rgb_dir = tgt_img_folder
+    # output_dir = output_dir
 
     # 遍历目录下的所有 PNG 图像
     if not os.path.exists(tgt_img_folder):
@@ -152,13 +146,7 @@ def run_script(tgt_img_folder, output_dir, num_images_to_load):
 
     command = [
         "python",
-        inference_script,
-        "--domain", domain,
-        "--ensemble_size", str(ensemble_size),
-        "--seed", str(seed),
-        "--denoise_steps", str(denoise_steps),
-        "--input_dir", input_rgb_dir,
-        "--output_dir", output_dir,
+        inference_script
     ]
     try:
         # 执行命令
@@ -222,7 +210,7 @@ if __name__ == '__main__':
         print("yes _run_script")
     # step3: 调用匹配函数找到GT
     tgt_images, gt_images, pred_images = load_matched_images(input_folder, gt_folder,
-                                                             output_folder + "/depth_colored",
+                                                             output_folder,
                                                              start, num_images_to_load, prefix)
     # step4: 计算可视化以及保存metric
     visualize_and_save_images(tgt_images, gt_images, pred_images, vis_folder)

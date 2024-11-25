@@ -1,14 +1,14 @@
 # 定义超参数
 hyperparameters = {
-    'is_run_script': True,
+    'is_run_script': False,
     'start': 0,
     'num_images_to_load': 300,  # Example number, change as needed
     'is_visualize': True,
     'is_save_metric': True,
-    'prefix': "_pred_colored",  # 深度图存的前缀/后缀，例如depth_aov_
+    'prefix': "depth_",  # 深度图存的前缀/后缀，例如depth_aov_
     'pred_folder': 'Saved_Depth',
     # -----------重要基本参数-----------
-    'model_name': 'GeoWizard-EndoSlam-Unity',
+    'model_name': 'DPT-EndoSlam-Unity',
     'vis_path': 'Saved_visulaization/',
     'pred_depth_img_path': 'Saved_depth_data/',
     'metrics_path': 'Saved_metrics_data/',

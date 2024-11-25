@@ -6,6 +6,7 @@ from diffusers.utils import load_image, make_image_grid
 import matplotlib.pyplot as plt
 from torchvision import transforms
 from PIL import Image
+from config.config_test import hyperparameters as param
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'  # Add this to handle the OpenMP error
 
@@ -55,7 +56,7 @@ def save_depth_tensor_to_png(depth_map, output_depth_path):
     img.save(output_depth_path, "PNG")
 
 
-def process_images_from_folder(input_folder, output_folder, saved_depth_folder, depth_estimator, num_images):
+def process_images_from_folder(input_folder, vis_folder, saved_depth_folder, depth_estimator, num_images):
     """ Process a fixed number of images from a folder, generate depth maps, and save them. """
     transform = transforms.Compose([
         # transforms.Resize((224, 224)),  # Resize images if necessary
@@ -80,12 +81,13 @@ def process_images_from_folder(input_folder, output_folder, saved_depth_folder, 
 
 os.environ["http_proxy"] = "http://127.0.0.1:10809"
 os.environ["https_proxy"] = "http://127.0.0.1:10809"
-
+output_folder = param["pred_depth_img_path"] + param["model_name"]
 input_folder = r"/mnt/share/toky/Datasets/EndoDepth-Diffusion/EndoSlam-Unity/eval/"
-output_folder = "saved_depth_visualization"
+vis_folder = "saved_depth_visualization"
 saved_data_root = r"saved_depth/"  # saved_depth/
-output_depth_path = os.path.join(saved_data_root, "EndoSlam-Unity")  # 模型和测试数据集名字
-os.makedirs(os.path.dirname(output_depth_path), exist_ok=True)
+
+output_folder = param["pred_depth_img_path"] + param["model_name"]
+os.makedirs(os.path.dirname(output_folder), exist_ok=True)
 depth_estimator = pipeline("depth-estimation", model=r"/mnt/share/toky/LLMs/dpt-large/")
 num_images = 300  # 要处理的图片张数
-process_images_from_folder(input_folder, output_folder, output_depth_path, depth_estimator, num_images)
+process_images_from_folder(input_folder, vis_folder, output_folder, depth_estimator, num_images)
